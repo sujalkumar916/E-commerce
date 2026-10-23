@@ -10,7 +10,7 @@ export const fetchProducts = createAsyncThunk(
       const { data } = await API.get("/products", { params });
       return data;
     } catch (err) {
-      return rejectWithValue(err.response?.data?.message);
+      return rejectWithValue(err.response?.data?.message || err.message);
     }
   }
 );
@@ -81,9 +81,13 @@ const productSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchProducts.pending, (state) => { state.loading = true; })
+      .addCase(fetchProducts.pending, (state) => {
+        state.loading = true;
+        state.error = null;
+      })
       .addCase(fetchProducts.fulfilled, (state, action) => {
         state.loading = false;
+        state.error = null;
         state.products = action.payload.products;
         state.total = action.payload.total;
         state.pages = action.payload.pages;
@@ -91,7 +95,7 @@ const productSlice = createSlice({
       })
       .addCase(fetchProducts.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload;
+        state.error = action.payload || action.error.message;
       });
 
     builder
@@ -128,4 +132,3 @@ const productSlice = createSlice({
 
 export const { clearSelectedProduct } = productSlice.actions;
 export default productSlice.reducer;
-

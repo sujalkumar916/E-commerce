@@ -97,6 +97,16 @@ npm run dev
 
 Open your browser at **`http://localhost:5173`**.
 
+### 5. Production Deployment
+
+In Vercel, set the frontend environment variable `VITE_API_URL` to the backend origin, for example:
+
+```env
+VITE_API_URL=https://your-backend.onrender.com
+```
+
+The frontend appends `/api` automatically (and avoids adding it twice if the value already ends in `/api`). If unset, production builds use this project's Render API URL; local development uses Vite's `/api` proxy. Vite embeds this value at build time, so redeploy the frontend after changing it.
+
 ---
 
 ## 🔑 Default Credentials (After Seeding)
@@ -143,4 +153,3 @@ Detailed architectural deep-dive, system diagrams, and technical interview prepa
 ## 👨‍💻 Author
 **Sujal Kumar**
 - GitHub: [@sujalkumar916](https://github.com/sujalkumar916)
-

@@ -8,7 +8,7 @@ const CATEGORIES = ["All", "Electronics", "Clothing", "Books", "Food", "Sports",
 
 const Home = () => {
   const dispatch = useDispatch();
-  const { products, loading, total, pages, currentPage } = useSelector(
+  const { products, loading, error, total, pages, currentPage } = useSelector(
     (state) => state.products
   );
   const [search, setSearch] = useState("");
@@ -84,6 +84,10 @@ const Home = () => {
             <div key={i} className="animate-pulse bg-gray-200 rounded-2xl h-72"></div>
           ))}
         </div>
+      ) : error ? (
+        <div role="alert" className="text-center py-20 text-red-600">
+          Products could not be loaded: {error}
+        </div>
       ) : products.length === 0 ? (
         <div className="text-center py-20">
           <p className="text-gray-500 text-lg">No products found</p>
@@ -119,4 +123,3 @@ const Home = () => {
 };
 
 export default Home;
-

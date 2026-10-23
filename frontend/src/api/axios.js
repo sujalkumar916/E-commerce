@@ -1,8 +1,17 @@
 import axios from "axios";
 
-// Axios instance with base URL (Production URL from env or fallback to /api for dev proxy)
+const configuredApiUrl = import.meta.env.VITE_API_URL?.trim().replace(/\/+$/, "");
+const apiOrigin =
+  configuredApiUrl ||
+  (import.meta.env.PROD ? "https://e-commerce-anxs.onrender.com" : "");
+const apiBaseUrl = apiOrigin
+  ? apiOrigin.endsWith("/api")
+    ? apiOrigin
+    : `${apiOrigin}/api`
+  : "/api";
+
 const API = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || "/api",
+  baseURL: apiBaseUrl,
   withCredentials: true,
 });
 
@@ -37,4 +46,3 @@ API.interceptors.response.use(
 );
 
 export default API;
-
