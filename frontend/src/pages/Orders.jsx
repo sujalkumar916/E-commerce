@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import API from "../api/axios";
-import { io } from "socket.io-client";
+import { createSocketConnection } from "../socket";
 import { Package, CheckCircle, Truck, Clock, XCircle } from "lucide-react";
 
 const STATUS_CONFIG = {
@@ -17,7 +17,7 @@ const Orders = () => {
 
   useEffect(() => {
     // ✅ Ek hi socket connection — pehle banao, phir use karo
-    const socket = io("http://localhost:5000", { withCredentials: true });
+    const socket = createSocketConnection();
 
     const fetchOrders = async () => {
       try {

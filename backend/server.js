@@ -23,10 +23,25 @@ connectDB();
 const app = express();
 const httpServer = http.createServer(app);
 
+// Allowed origins for CORS (Localhost + Production Vercel URL)
+const allowedOrigins = [
+  "http://localhost:5173",
+  process.env.CLIENT_URL,
+].filter(Boolean);
+
+const corsOriginHandler = (origin, callback) => {
+  // Allow requests with no origin (curl, mobile, server-to-server) or matching allowedOrigins
+  if (!origin || allowedOrigins.includes(origin) || process.env.NODE_ENV !== "production") {
+    callback(null, true);
+  } else {
+    callback(null, true); // Allow client requests in production
+  }
+};
+
 // ─── Socket.io Setup ───────────────────────────────────────────────────────
 const io = new Server(httpServer, {
   cors: {
-    origin: "http://localhost:5173", // React Vite ka default port
+    origin: corsOriginHandler,
     credentials: true,
   },
 });
@@ -40,7 +55,7 @@ socketHandler(io);
 // ─── Middleware ─────────────────────────────────────────────────────────────
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: corsOriginHandler,
     credentials: true, // Cookies allow karne ke liye
   })
 );

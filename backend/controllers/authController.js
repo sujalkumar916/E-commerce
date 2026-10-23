@@ -103,8 +103,11 @@ const login = async (req, res) => {
 // @route   POST /api/auth/logout
 // @access  Protected
 const logout = (req, res) => {
+  const isProduction = process.env.NODE_ENV === "production";
   res.cookie("token", "", {
     httpOnly: true,
+    secure: isProduction,
+    sameSite: isProduction ? "none" : "lax",
     expires: new Date(0), // Cookie turant expire karo
   });
 

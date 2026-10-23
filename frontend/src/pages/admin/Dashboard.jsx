@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { io } from "socket.io-client";
 import API from "../../api/axios";
+import { createSocketConnection } from "../../socket";
 import { Package, ShoppingBag, Users, DollarSign, Bell, Boxes } from "lucide-react";
 
 const STATUS_OPTIONS = ["pending", "processing", "shipped", "delivered", "cancelled"];
@@ -16,7 +16,7 @@ const AdminDashboard = () => {
     fetchOrders();
 
     // Admin socket room join karo — connection confirm hone ke baad
-    const socket = io("http://localhost:5000", { withCredentials: true });
+    const socket = createSocketConnection();
 
     socket.on("connect", () => {
       socket.emit("admin-join");

@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { io } from "socket.io-client";
+import { createSocketConnection } from "../socket";
 
 // Socket.io connection hook
 const useSocket = () => {
@@ -7,9 +7,7 @@ const useSocket = () => {
 
   useEffect(() => {
     // Socket.io server se connect karo
-    socketRef.current = io("http://localhost:5000", {
-      withCredentials: true,
-    });
+    socketRef.current = createSocketConnection();
 
     socketRef.current.on("connect", () => {
       console.log("🔌 Socket connected:", socketRef.current.id);

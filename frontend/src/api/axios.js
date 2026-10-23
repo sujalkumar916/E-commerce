@@ -1,9 +1,9 @@
 import axios from "axios";
 
-// Axios instance with base URL
+// Axios instance with base URL (Production URL from env or fallback to /api for dev proxy)
 const API = axios.create({
-  baseURL: "/api",        // Vite proxy ki wajah se /api → localhost:5000/api
-  withCredentials: true,  // HttpOnly cookies automatically send hongi
+  baseURL: import.meta.env.VITE_API_URL || "/api",
+  withCredentials: true,
 });
 
 // Request interceptor — JWT token header mein attach karo (agar localStorage mein hai)

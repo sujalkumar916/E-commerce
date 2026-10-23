@@ -65,10 +65,12 @@ const generateTokenAndSetCookie = (res, userId) => {
     expiresIn: process.env.JWT_EXPIRE || "7d",
   });
 
+  const isProduction = process.env.NODE_ENV === "production";
+
   res.cookie("token", token, {
     httpOnly: true,       // JS se access nahi hoga (XSS protection)
-    secure: process.env.NODE_ENV === "production", // HTTPS only in production
-    sameSite: "strict",   // CSRF protection
+    secure: isProduction, // HTTPS only in production (mandatory for SameSite=None)
+    sameSite: isProduction ? "none" : "lax", // Cross-origin deployment support
     maxAge: 7 * 24 * 60 * 60 * 1000, // 7 din
   });
 
